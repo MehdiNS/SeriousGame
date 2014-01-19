@@ -1,0 +1,4 @@
+SeriousGame
+===========
+
+Python + Kivy
