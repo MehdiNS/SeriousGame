@@ -6,7 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.core.audio import SoundLoader
-#from sg.game1 import Game1App
+from sg.game1 import Game1App
 
 class Intro(BoxLayout):
     id_box = ObjectProperty()
@@ -20,7 +20,7 @@ class Intro(BoxLayout):
             self.remove_widget(self.button_box)
             self.remove_widget(self.id_box)
             self.remove_widget(self.id_grid)
-            #return Game1App().run();
+            return Game1App().run();
         else:
             self.id_box.background_color = [1,0.4,0.4,1]
 

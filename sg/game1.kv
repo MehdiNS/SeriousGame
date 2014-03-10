@@ -1,0 +1,23 @@
+#:kivy 1.8.0
+
+<Object>:
+    size: 50, 50
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+	on_touch_down: root.on_touch_move          
+
+
+<Game1>:
+    
+    Object:
+        x: root.x + 50
+        center_y: root.center_y
+        
+        
+	Object:
+        x: root.x
+        center_y: root.center_y +100
+        
+        
