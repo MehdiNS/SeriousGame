@@ -11,9 +11,15 @@ class Object(Widget):
         if touch.grab_current is self:
             self.center_x = touch.x
             self.center_y = touch.y
+
+            
     
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
+            if touch.is_double_tap:
+                sound = SoundLoader.load(self.text)
+                sound.play()
+                return;
             self.opacity = 0.2
             touch.grab(self)
             return True
