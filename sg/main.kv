@@ -1,0 +1,36 @@
+#:kivy 1.8.0
+
+<Intro>: 
+    button_box: button_input
+    id_box: id_input
+	orientation: "vertical"
+    height: "100dp"
+    size_hint_y: None
+    id_grid: grid_layout
+
+	GridLayout:
+		id: grid_layout
+        cols: 2
+        rows: 1
+        orientation: "vertical"
+        row_default_height: "40dp"
+       
+        spacing: "10dp"
+        padding: "10dp"
+        
+        Label:
+            text: "Identification"
+            color: [1,1,1,1]
+        
+        TextInput:
+        	multiline: False
+        	hint_text: "Tapez votre identifiant"
+        	id: id_input
+
+    Button:
+        id: button_input
+        text: "Login"
+        color: [0,0,0,1]
+        on_press: root.login()
+            
+          
