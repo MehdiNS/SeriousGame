@@ -1,12 +1,8 @@
 #:kivy 1.8.0
 
 <Object>:
-    size: 50, 50
-    canvas:
-        Rectangle:
-            pos: self.pos
-            size: self.size
-	on_touch_down: root.on_touch_move          
+    size: 100, 100
+	on_touch_down: root.on_touch_move
 
 
 <Game1>:
@@ -14,10 +10,21 @@
     Object:
         x: root.x + 50
         center_y: root.center_y
-        
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+	        
         
 	Object:
         x: root.x
         center_y: root.center_y +100
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat2.tif'
+        
         
         
