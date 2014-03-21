@@ -1,0 +1,282 @@
+#:kivy 1.8.0
+
+# Initialization of the class object	
+<Category>:
+    size: 200, 200
+    canvas: 
+    	Rectangle
+    		source: "/home/ph/git/SeriousGame/image/BackGrounds/fond-de-jungle_18-7113.jpg"
+    		size: self.size
+    		pos: self.pos
+    		
+# Initialization of the class object
+<Object>:
+	category: "house"
+    size: 100, 100
+	on_touch_down: root.on_touch_move
+	pos_base: [0,0]
+
+
+
+# List of objects used in the class Game2
+# The following list match the organization of objects
+# A  B  C
+# 1  1  1
+# 2  2  2
+# 3  3  3
+# 4  4  4
+# 5  5  5
+# 6  6  6
+<Game2>:
+	# Category 1 : Houses
+	Category:
+        x: root.x + 500
+        center_y: root.top - 100
+        category: "cat_house"
+        name: "Cat1"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+    
+	#Category 2 : Vehicles
+	Category:
+		x: root.x + 500
+		center_y: root.top - 300
+		category: "vehicle"
+		name: "Cat2"
+		canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+	            
+	#Category 3 : characters            
+	Category:
+        x: root.x + 500
+        center_y: root.top - 500
+        category: "character"
+        name: "Cat3"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'       
+	#A1 Object
+    Object:
+        x: root.x
+        center_y: root.top - 50
+        pos_base: [root.x,root.top -100]
+        name: "A1"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#A2 Object
+    Object:
+        x: root.x
+        center_y: root.top - 150
+        name: "A2"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#A3 Object
+    Object:
+        x: root.x
+        center_y: root.top - 250
+        name: "A3"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'      
+		
+	#A4 Object
+    Object:
+        x: root.x
+        center_y: root.top - 350
+        name: "A4"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#A5 Object
+    Object:
+        x: root.x
+        center_y: root.top - 450
+        name: "A5"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#A6 Object
+    Object:
+        x: root.x
+        center_y: root.top - 550
+        name: "A6"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#B1 Object
+    Object:
+        x: root.x +100
+        center_y: root.top - 50
+        name: "B1"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#B2 Object
+    Object:
+        x: root.x + 100
+        center_y: root.top - 150
+        name: "B2"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#B3 Object
+    Object:
+        x: root.x + 100
+        center_y: root.top - 250
+        name: "B3"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'      
+		
+	#B4 Object
+    Object:
+        x: root.x + 100
+        center_y: root.top - 350
+        name: "B4"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#B5 Object
+    Object:
+        x: root.x + 100
+        center_y: root.top - 450
+        name: "B5"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#B6 Object
+    Object:
+        x: root.x + 100
+        center_y: root.top - 550
+        name: "B6"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#C1 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 50
+        name: "C1"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#C2 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 150
+        name: "C2"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#C3 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 250
+        name: "C3"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'      
+		
+	#C4 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 350
+        name: "C4"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+
+	#C5 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 450
+        name: "C5"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+		
+	#C6 Object
+    Object:
+        x: root.x + 200
+        center_y: root.top - 550
+        name: "C6"
+        canvas:
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: '../image/Dessins/Habitations/Habitat1.tif'
+		text: '../sound/CEstUne/CEstUneDena.wav'
+	
