@@ -2,7 +2,8 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
-from kivy.properties import OptionProperty, NumericProperty, ListProperty
+from kivy.properties import OptionProperty, NumericProperty, ListProperty, ReferenceListProperty,\
+    ObjectProperty
 import time
 
 
@@ -11,7 +12,7 @@ class Object(Widget):
    
     """
     print("Salut")
-    
+    #print(parent.touched_object)
       
         
     def on_touch_move(self, touch):
@@ -24,6 +25,9 @@ class Object(Widget):
         
         #If the current object is the one grab
         if touch.grab_current is self:
+            
+            self.parent.touched_object = self
+            print(self)
             print("pos_base"+str(self.pos_base)+"\n")
             #print("old_x :"+str(self.old_x)+"old_y"+str(self.old_y)+"\n")
             #print("On_touch_move activated"+str(self.x)+"\n")
@@ -56,13 +60,20 @@ class Object(Widget):
         
         """
         print(self.name)
+        print("\n")
+        print(self.category)
+        print(touch.grab_current)
+        print("\n")
+        mem = Object()
         if (self.category=="cat_house"):
             print("house found")
             mem = self
+            print("mem :")
+            print(mem)
         #If this is the correct object
         if touch.grab_current is self:            
             if self.collide_widget(mem):
-                print("touch")
+                print("touched dkldklzdqdqkzl")
             #If the object isn't dropped on a category, x and y are reset
             if self.x>400 :
                 print(str(self.pos_base))
@@ -80,39 +91,45 @@ class Object(Widget):
                 self.parent.remove_widget(self)
                 return True
 
-class Category(Widget):
-  '''  
-    def on_touch_move(self, touch):
-        if touch.grab_current is self:
-            self.center_x = touch.x
-            self.center_y = touch.y
+class CategoryHouse(Widget):
+    '''       
 
-            
+'''
     
-    def on_touch_down(self, touch):
-        
-        if self.collide_point(*touch.pos):
-            if touch.is_double_tap:
-                
-                sound = SoundLoader.load(self.text)
-                sound.play()
-                return;
-            self.opacity = 0.2
-            touch.grab(self)
-            return True
+class CategoryVehicle(Widget):
+    '''       
 
-    def on_touch_up(self, touch):
-        if touch.grab_current is self:
-            self.center_x = touch.x
-            self.center_y = touch.y
-            self.opacity = 1
-            touch.ungrab(self)
-            return True    
+'''
+
+class CategoryCharacter(Widget):
+    '''       
+
 '''
 class Game2(Widget):
     
-    def update(self, dt):
-        pass
+    #Define the three categories
+    category_house = ObjectProperty(None)
+    category_vehicle = ObjectProperty(None)
+    category_character = ObjectProperty(None)
+    
+    #Define the object touched
+    touched_object = ObjectProperty(None)
+    
+    def update(self, dt, touch):
+        if (self.category_house.collide_point(touch.pos)):
+            print("Maison touchee")
+        #if ((self.touched_object.category == self.category_house.category) 
+            #and (self.category_house.collide_point())):
+            #print("Well done !")
+        #self.ball.move()
+
+        #bounce off top and bottom
+        #if (self.ball.y < 0) or (self.ball.top > self.height):
+            #self.ball.velocity_y *= -1
+
+        #bounce off left and right
+        #if (self.ball.x < 0) or (self.ball.right > self.width):
+            #self.ball.velocity_x *= -1
     
     def on_winning(self, touch):
         pass

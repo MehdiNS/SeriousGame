@@ -1,19 +1,46 @@
 #:kivy 1.8.0
 
 # Initialization of the class object	
-<Category>:
-    size: 200, 200
-    canvas: 
-    	Rectangle
-    		source: "/home/ph/git/SeriousGame/image/BackGrounds/fond-de-jungle_18-7113.jpg"
-    		size: self.size
-    		pos: self.pos
+<CategoryHouse>:
+	category: "house"
+	size: 200,200     
+	name: "Cat1"
+	canvas:
+	    Rectangle:
+	        pos: self.pos
+	        size: self.size
+	        source: '../image/Dessins/Habitations/Habitat1.tif'
+
+<CategoryVehicle>:
+	size: 200,200
+	category: "vehicle"
+	name: "Cat2"
+	canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: '../image/Dessins/Habitations/Habitat1.tif'
     		
+<CategoryCharacter>:
+    size: 200, 200
+    category: "character"
+    name: "Cat3"
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: '../image/Dessins/Habitations/Habitat1.tif'
+    		    		
 # Initialization of the class object
 <Object>:
 	category: "house"
     size: 100, 100
-	on_touch_down: root.on_touch_move
+    id: untouched
+	on_touch_down: 
+		root.on_touch_move
+		self.id = touched
+	on_touch_up:
+		self.id = untouched
 	pos_base: [0,0]
 
 
@@ -28,41 +55,27 @@
 # 5  5  5
 # 6  6  6
 <Game2>:
-	# Category 1 : Houses
-	Category:
-        x: root.x + 500
-        center_y: root.top - 100
-        category: "cat_house"
-        name: "Cat1"
-        canvas:
-	        Rectangle:
-	            pos: self.pos
-	            size: self.size
-	            source: '../image/Dessins/Habitations/Habitat1.tif'
-    
-	#Category 2 : Vehicles
-	Category:
+	category_house: cat_house
+	category_vehicle: cat_vehicle
+	category_character: cat_character
+	
+	#touched_object: touched 
+
+	CategoryHouse:
+		id: cat_house
+		x: root.x + 500
+		center_y: root.top - 100
+		
+	CategoryVehicle:
+		id: cat_vehicle
 		x: root.x + 500
 		center_y: root.top - 300
-		category: "vehicle"
-		name: "Cat2"
-		canvas:
-	        Rectangle:
-	            pos: self.pos
-	            size: self.size
-	            source: '../image/Dessins/Habitations/Habitat1.tif'
-	            
-	#Category 3 : characters            
-	Category:
-        x: root.x + 500
-        center_y: root.top - 500
-        category: "character"
-        name: "Cat3"
-        canvas:
-	        Rectangle:
-	            pos: self.pos
-	            size: self.size
-	            source: '../image/Dessins/Habitations/Habitat1.tif'       
+		
+	CategoryCharacter:
+		id: cat_character
+		x: root.x + 500
+		center_y: root.top - 500
+      
 	#A1 Object
     Object:
         x: root.x
