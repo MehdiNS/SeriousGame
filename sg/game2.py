@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
-from kivy.properties import OptionProperty, NumericProperty, ListProperty, ReferenceListProperty,\
+from kivy.properties import \
     ObjectProperty
 import time
 
@@ -10,46 +10,36 @@ import time
 class Object(Widget):
     """Class to manage drag and drop
    
-    """
-    print("Salut")
-    #print(parent.touched_object)
-      
-        
+    """   
     def on_touch_move(self, touch):
         """Function called when the object is moved
         
         :param touch: finger on the screen     
         
-        """
-        
-        
+        """       
         #If the current object is the one grab
         if touch.grab_current is self:
-            
+            #Update of position
             self.parent.touched_object = self
-            print(self)
-            print("pos_base"+str(self.pos_base)+"\n")
-            #print("old_x :"+str(self.old_x)+"old_y"+str(self.old_y)+"\n")
-            #print("On_touch_move activated"+str(self.x)+"\n")
             self.center_x = touch.x
-            self.center_y = touch.y
-
-            
+            self.center_y = touch.y          
     
     def on_touch_down(self, touch):
         """Function called when the object is double clicked
         
         :param touch: finger on the screen     
         
-        """  
-        
-        if self.collide_point(*touch.pos):
-            print("On_touch_down activated"+str(self.x)+"\n")  
-            if touch.is_double_tap:                
+        """
+        #Get the object touched by the user    
+        if self.collide_point(*touch.pos): 
+            if touch.is_double_tap:    
+                #Play a sound if the user do a double tap           
                 sound = SoundLoader.load(self.text)
                 sound.play()
                 return;
+            #Set opacity to display the current selected object
             self.opacity = 0.2
+            #The object is grabbed
             touch.grab(self)
             return True
 
@@ -59,51 +49,71 @@ class Object(Widget):
         :param touch: finger on the screen     
         
         """
-        print(self.name)
-        print("\n")
-        print(self.category)
-        print(touch.grab_current)
-        print("\n")
-        mem = Object()
-        if (self.category=="cat_house"):
-            print("house found")
-            mem = self
-            print("mem :")
-            print(mem)
         #If this is the correct object
-        if touch.grab_current is self:            
-            if self.collide_widget(mem):
-                print("touched dkldklzdqdqkzl")
-            #If the object isn't dropped on a category, x and y are reset
-            if self.x>400 :
-                print(str(self.pos_base))
-                self.pos = self.pos_base
-                
-                self.opacity = 1
-                #The object is dropped
-                touch.ungrab(self)
-                return True
-            #Else the object isn't visible anymore and old_x, old_y are set
-            else :
-                #The object is dropped and removed
-                touch.ungrab(self)
-                print(str(self))
-                self.parent.remove_widget(self)
-                return True
+        if touch.grab_current is self:    
+            #The Object is ungrabbed
+            touch.ungrab(self)  
+            #The initial opacity is set                
+            self.opacity = 1
+            #Check if the object has been dropped on the category House
+            if (self.collide_widget(self.parent.category_house)):
+                print("House touched")
+                #Check if the object has been dropped on the good category
+                if (self.category=="house"):
+                    print("Congratulations !")
+                    #Object is removed
+                    self.parent.remove_widget(self)
+                    return True
+                else:
+                    print("This is the wrong category")
+                    #The object is moved back to the initial position
+                    self.pos = self.pos_base
 
+            #Check if the object has been dropped on the category Vehicle
+            elif(self.collide_widget(self.parent.category_vehicle)):
+                print("Vehicle touched")
+                #Check if the object has been dropped on the good category
+                if (self.category=="vehicle"):
+                    print("Congratulations !")
+                    #Object is removed
+                    self.parent.remove_widget(self)
+                    return True
+                else:
+                    print("This is the wrong category")
+                    #The object is moved back to the initial position
+                    self.pos = self.pos_base
+
+            #Check if the object has been dropped on the category Character
+            elif(self.collide_widget(self.parent.category_character)):
+                print("Character touched")
+                #Check if the object has been dropped on the good category
+                if (self.category=="character"):
+                    print("Congratulations !")
+                    #Object is removed
+                    self.parent.remove_widget(self)
+                    return True
+                else:
+                    print("This is the wrong category")
+                    #The object is moved back to the initial position
+                    self.pos = self.pos_base   
+            
+            #The object is moved back to the initial position
+            self.pos = self.pos_base
+
+                    
 class CategoryHouse(Widget):
     '''       
-
+    This is the category which regroup all house objects
 '''
     
 class CategoryVehicle(Widget):
     '''       
-
+    This is the category which regroup all vehicle objects
 '''
 
 class CategoryCharacter(Widget):
     '''       
-
+    This is the category which regroup all character objects
 '''
 class Game2(Widget):
     
@@ -112,24 +122,9 @@ class Game2(Widget):
     category_vehicle = ObjectProperty(None)
     category_character = ObjectProperty(None)
     
-    #Define the object touched
-    touched_object = ObjectProperty(None)
     
-    def update(self, dt, touch):
-        if (self.category_house.collide_point(touch.pos)):
-            print("Maison touchee")
-        #if ((self.touched_object.category == self.category_house.category) 
-            #and (self.category_house.collide_point())):
-            #print("Well done !")
-        #self.ball.move()
-
-        #bounce off top and bottom
-        #if (self.ball.y < 0) or (self.ball.top > self.height):
-            #self.ball.velocity_y *= -1
-
-        #bounce off left and right
-        #if (self.ball.x < 0) or (self.ball.right > self.width):
-            #self.ball.velocity_x *= -1
+    def update(self, dt):
+        pass
     
     def on_winning(self, touch):
         pass

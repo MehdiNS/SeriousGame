@@ -1,9 +1,11 @@
 #:kivy 1.8.0
 
-# Initialization of the class object	
+# Initialization of the different classes
+
+#Class for Houses	
 <CategoryHouse>:
-	category: "house"
-	size: 200,200     
+	size: 200,200
+	category: "house"   
 	name: "Cat1"
 	canvas:
 	    Rectangle:
@@ -11,6 +13,7 @@
 	        size: self.size
 	        source: '../image/Dessins/Habitations/Habitat1.tif'
 
+#Class for Vehicles
 <CategoryVehicle>:
 	size: 200,200
 	category: "vehicle"
@@ -20,7 +23,8 @@
             pos: self.pos
             size: self.size
             source: '../image/Dessins/Habitations/Habitat1.tif'
-    		
+
+#Class for Characters	
 <CategoryCharacter>:
     size: 200, 200
     category: "character"
@@ -31,16 +35,10 @@
             size: self.size
             source: '../image/Dessins/Habitations/Habitat1.tif'
     		    		
-# Initialization of the class object
+#Class for all different objects
 <Object>:
 	category: "house"
     size: 100, 100
-    id: untouched
-	on_touch_down: 
-		root.on_touch_move
-		self.id = touched
-	on_touch_up:
-		self.id = untouched
 	pos_base: [0,0]
 
 
@@ -93,6 +91,7 @@
     Object:
         x: root.x
         center_y: root.top - 150
+        pos_base: [root.x,root.top -200]
         name: "A2"
         canvas:
 	        Rectangle:
@@ -105,6 +104,7 @@
     Object:
         x: root.x
         center_y: root.top - 250
+        pos_base: [root.x,root.top -300]
         name: "A3"
         canvas:
 	        Rectangle:
@@ -117,6 +117,7 @@
     Object:
         x: root.x
         center_y: root.top - 350
+        pos_base: [root.x,root.top -4000]
         name: "A4"
         canvas:
 	        Rectangle:
@@ -129,6 +130,7 @@
     Object:
         x: root.x
         center_y: root.top - 450
+        pos_base: [root.x,root.top -500]
         name: "A5"
         canvas:
 	        Rectangle:
@@ -141,6 +143,7 @@
     Object:
         x: root.x
         center_y: root.top - 550
+        pos_base: [root.x,root.top -600]
         name: "A6"
         canvas:
 	        Rectangle:
@@ -153,6 +156,7 @@
     Object:
         x: root.x +100
         center_y: root.top - 50
+        pos_base: [root.x+100 ,root.top -100]
         name: "B1"
         canvas:
 	        Rectangle:
@@ -165,6 +169,7 @@
     Object:
         x: root.x + 100
         center_y: root.top - 150
+        pos_base: [root.x+100 ,root.top -200]
         name: "B2"
         canvas:
 	        Rectangle:
@@ -177,6 +182,7 @@
     Object:
         x: root.x + 100
         center_y: root.top - 250
+        pos_base: [root.x+100 ,root.top -300]
         name: "B3"
         canvas:
 	        Rectangle:
@@ -189,6 +195,7 @@
     Object:
         x: root.x + 100
         center_y: root.top - 350
+        pos_base: [root.x+100 ,root.top -400]
         name: "B4"
         canvas:
 	        Rectangle:
@@ -201,6 +208,7 @@
     Object:
         x: root.x + 100
         center_y: root.top - 450
+        pos_base: [root.x+100 ,root.top -500]
         name: "B5"
         canvas:
 	        Rectangle:
@@ -213,6 +221,7 @@
     Object:
         x: root.x + 100
         center_y: root.top - 550
+        pos_base: [root.x+100 ,root.top -600]
         name: "B6"
         canvas:
 	        Rectangle:
@@ -225,6 +234,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 50
+        pos_base: [root.x+200 ,root.top -100]
         name: "C1"
         canvas:
 	        Rectangle:
@@ -237,6 +247,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 150
+        pos_base: [root.x+200 ,root.top-200]
         name: "C2"
         canvas:
 	        Rectangle:
@@ -249,6 +260,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 250
+        pos_base: [root.x+200 ,root.top-300]
         name: "C3"
         canvas:
 	        Rectangle:
@@ -261,6 +273,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 350
+        pos_base: [root.x+200,root.top-400]
         name: "C4"
         canvas:
 	        Rectangle:
@@ -273,6 +286,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 450
+        pos_base: [root.x+200,root.top-500]
         name: "C5"
         canvas:
 	        Rectangle:
@@ -285,6 +299,7 @@
     Object:
         x: root.x + 200
         center_y: root.top - 550
+        pos_base: [root.x+200 ,root.top-600]
         name: "C6"
         canvas:
 	        Rectangle:
