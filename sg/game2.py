@@ -2,10 +2,9 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
-from kivy.properties import \
+from kivy.properties import NumericProperty, \
     ObjectProperty
 import time
-from kivy.graphics import Ellipse
 
 
 class Object(Widget):
@@ -64,11 +63,15 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="house"):
                         print("Congratulations !")
+                        #Update of score
+                        self.parent.score += 5
                         #Object is removed
                         self.parent.remove_widget(self)
                         return True
                     else:
                         print("This is the wrong category")
+                        #Update of score
+                        self.parent.score -= 1
                         #The object is moved back to the initial position
                         self.pos = self.pos_base
 
@@ -80,11 +83,15 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="vehicle"):
                         print("Congratulations !")
+                        #Update of score
+                        self.parent.score += 5
                         #Object is removed
                         self.parent.remove_widget(self)
                         return True
                     else:
                         print("This is the wrong category")
+                        #Update of score
+                        self.parent.score -= 1
                         #The object is moved back to the initial position
                         self.pos = self.pos_base
 
@@ -96,11 +103,15 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="character"):
                         print("Congratulations !")
+                        #Update of score
+                        self.parent.score += 5
                         #Object is removed
                         self.parent.remove_widget(self)
                         return True
                     else:
                         print("This is the wrong category")
+                        #Update of score
+                        self.parent.score -= 1
                         #The object is moved back to the initial position
                         self.pos = self.pos_base   
             
@@ -146,6 +157,9 @@ class CategoryCharacter(Widget):
     This is the category which regroup all character objects
 '''
 class Game2(Widget):
+    
+    #Score display
+    score = NumericProperty(0)
     
     #Define the three categories
     category_house = ObjectProperty(None)
