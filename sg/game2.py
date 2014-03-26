@@ -59,44 +59,50 @@ class Object(Widget):
             #Check if the object has been dropped on the category House
             if (self.collide_customed(self.parent.category_house)):
                 print("House touched")
-                #Check if the object has been dropped on the good category
-                if (self.category=="house"):
-                    print("Congratulations !")
-                    #Object is removed
-                    self.parent.remove_widget(self)
-                    return True
-                else:
-                    print("This is the wrong category")
-                    #The object is moved back to the initial position
-                    self.pos = self.pos_base
+                #If there is no other category in collision
+                if(not self.collide_customed(self.parent.category_vehicle)):
+                    #Check if the object has been dropped on the good category
+                    if (self.category=="house"):
+                        print("Congratulations !")
+                        #Object is removed
+                        self.parent.remove_widget(self)
+                        return True
+                    else:
+                        print("This is the wrong category")
+                        #The object is moved back to the initial position
+                        self.pos = self.pos_base
 
             #Check if the object has been dropped on the category Vehicle
             elif(self.collide_customed(self.parent.category_vehicle)):
                 print("Vehicle touched")
-                #Check if the object has been dropped on the good category
-                if (self.category=="vehicle"):
-                    print("Congratulations !")
-                    #Object is removed
-                    self.parent.remove_widget(self)
-                    return True
-                else:
-                    print("This is the wrong category")
-                    #The object is moved back to the initial position
-                    self.pos = self.pos_base
+                #If there is no other category in collision                
+                if((not self.collide_customed(self.parent.category_house))and(not self.collide_customed(self.parent.category_character))):
+                    #Check if the object has been dropped on the good category
+                    if (self.category=="vehicle"):
+                        print("Congratulations !")
+                        #Object is removed
+                        self.parent.remove_widget(self)
+                        return True
+                    else:
+                        print("This is the wrong category")
+                        #The object is moved back to the initial position
+                        self.pos = self.pos_base
 
             #Check if the object has been dropped on the category Character
             elif(self.collide_customed(self.parent.category_character)):
                 print("Character touched")
-                #Check if the object has been dropped on the good category
-                if (self.category=="character"):
-                    print("Congratulations !")
-                    #Object is removed
-                    self.parent.remove_widget(self)
-                    return True
-                else:
-                    print("This is the wrong category")
-                    #The object is moved back to the initial position
-                    self.pos = self.pos_base   
+                #If there is no other category in collision
+                if (not self.collide_customed(self.parent.category_vehicle)):
+                    #Check if the object has been dropped on the good category
+                    if (self.category=="character"):
+                        print("Congratulations !")
+                        #Object is removed
+                        self.parent.remove_widget(self)
+                        return True
+                    else:
+                        print("This is the wrong category")
+                        #The object is moved back to the initial position
+                        self.pos = self.pos_base   
             
             #The object is moved back to the initial position
             self.pos = self.pos_base
