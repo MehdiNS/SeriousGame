@@ -5,6 +5,7 @@ from kivy.core.audio import SoundLoader
 from kivy.properties import \
     ObjectProperty
 import time
+from kivy.graphics import Ellipse
 
 
 class Object(Widget):
@@ -56,7 +57,7 @@ class Object(Widget):
             #The initial opacity is set                
             self.opacity = 1
             #Check if the object has been dropped on the category House
-            if (self.collide_widget(self.parent.category_house)):
+            if (self.collide_customed(self.parent.category_house)):
                 print("House touched")
                 #Check if the object has been dropped on the good category
                 if (self.category=="house"):
@@ -70,7 +71,7 @@ class Object(Widget):
                     self.pos = self.pos_base
 
             #Check if the object has been dropped on the category Vehicle
-            elif(self.collide_widget(self.parent.category_vehicle)):
+            elif(self.collide_customed(self.parent.category_vehicle)):
                 print("Vehicle touched")
                 #Check if the object has been dropped on the good category
                 if (self.category=="vehicle"):
@@ -84,7 +85,7 @@ class Object(Widget):
                     self.pos = self.pos_base
 
             #Check if the object has been dropped on the category Character
-            elif(self.collide_widget(self.parent.category_character)):
+            elif(self.collide_customed(self.parent.category_character)):
                 print("Character touched")
                 #Check if the object has been dropped on the good category
                 if (self.category=="character"):
@@ -99,7 +100,30 @@ class Object(Widget):
             
             #The object is moved back to the initial position
             self.pos = self.pos_base
-
+    
+    def collide_customed(self, widget):
+        '''
+        Fonction which implement custom collision between 2 widgets
+        This function draw a square with center (self.center_x, self.center_y) and size = ( widget.size - self.size)/2 (1 if res <0)
+        :param Widget: the widget to test collision with self
+        :type widget = Widget, we will use center_x,center_y and size
+        
+        :return Return true is self's custom zone is in collision with widget
+    '''
+        #Calcul of radius
+        size = ((widget.size_hint_x - self.size_hint_x)/4)
+        # if r <=0, the test will be done with a point
+        if (size<=0):
+            size = 1
+        #Creation of the zone
+        zone = Widget()
+        zone.center_x = widget.center_x
+        zone.center_y = widget.center_y
+        zone.size_hint_x = size
+        zone.size_hint_y = size
+        
+        #Test the collision
+        return(self.collide_widget(zone))
                     
 class CategoryHouse(Widget):
     '''       
@@ -128,8 +152,6 @@ class Game2(Widget):
     
     def on_winning(self, touch):
         pass
-    def get_Widget(self):
-        return self.Widget
 
 class Game2App(App):
     def build(self):
