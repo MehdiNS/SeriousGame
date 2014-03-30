@@ -4,6 +4,7 @@ from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 from kivy.properties import NumericProperty, \
     ObjectProperty
+import dataBase
 import time
 
 
@@ -11,6 +12,9 @@ class Object(Widget):
     """Class to manage drag and drop
    
     """   
+    #Open a connection for each Object
+    local_db = dataBase.DataBase()  
+    
     def on_touch_move(self, touch):
         """Function called when the object is moved
         
@@ -65,8 +69,13 @@ class Object(Widget):
                         print("Congratulations !")
                         #Update of score
                         self.parent.score += 5
+                        val = self.parent.score
+                        print(time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
                         #Object is removed
                         self.parent.remove_widget(self)
+                        #SAving in dataBase
+                        self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
+                        self.local_db.print_table("game2")
                         return True
                     else:
                         print("This is the wrong category")
@@ -158,6 +167,12 @@ class CategoryCharacter(Widget):
 '''
 class Game2(Widget):
     
+    #Create the data base
+    db = dataBase.DataBase()    
+    table_name = "Game2"
+    table_attributes = ["time Date", "score int"]
+    db.create_Table(table_name,table_attributes)
+    
     #Score display
     score = NumericProperty(0)
     
@@ -165,7 +180,6 @@ class Game2(Widget):
     category_house = ObjectProperty(None)
     category_vehicle = ObjectProperty(None)
     category_character = ObjectProperty(None)
-    
     
     def update(self, dt):
         pass
