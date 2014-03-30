@@ -54,7 +54,8 @@ class DataBase():
         request = request.strip(',')
         request = request+')'
         
-        
+        print("Create :")
+        print(request)
         
         #Execution of the request
         self.data_Base_Execute(request)
@@ -90,12 +91,14 @@ class DataBase():
         
         #Add data to the request        
         for k in data :
-            request = request+str(k)+",";
+            request = request+"'"+str(k)+"',";
         
         #remove of the last ',' and add of the last ')'
         request = request.strip(',')
         request= request+ ");"
-    
+        
+        print("Insert")
+        print(request)
         
         #Execution of the request
         self.data_Base_Execute(request)
@@ -160,7 +163,10 @@ class DataBase():
             self.conn.commit()
         except sqlite3.Error as e:
             print "An error occurred:", e.args[0]
-        
+    def print_table(self, table_name):
+        #Display all the table name table_name
+        for row in self.conn.execute("SELECT * FROM "+table_name+";"):
+            print row
         
         
         

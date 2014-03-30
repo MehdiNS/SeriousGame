@@ -6,6 +6,7 @@ from kivy.properties import NumericProperty, \
     ObjectProperty
 import dataBase
 import time
+from kivy.config import Config
 
 
 class Object(Widget):
@@ -166,13 +167,14 @@ class CategoryCharacter(Widget):
     This is the category which regroup all character objects
 '''
 class Game2(Widget):
-    
     #Create the data base
     db = dataBase.DataBase()    
     table_name = "Game2"
     table_attributes = ["time Date", "score int"]
     db.create_Table(table_name,table_attributes)
     
+    print(Widget.width)
+    print(Widget.height)
     #Score display
     score = NumericProperty(0)
     
@@ -188,7 +190,12 @@ class Game2(Widget):
         pass
 
 class Game2App(App):
+    
     def build(self):
+        #Set window's size
+        Config.set('graphics', 'width', 800)
+        Config.set('graphics', 'height', 600)
+        #Start the game
         game = Game2()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         return game

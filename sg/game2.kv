@@ -4,7 +4,6 @@
 
 #Class for Houses	
 <CategoryHouse>:
-	size: 200,200
 	category: "house"   
 	name: "Cat1"
 	canvas:
@@ -53,31 +52,39 @@
 # 5  5  5
 # 6  6  6
 <Game2>:
+	canvas:
+		Rectangle:
+			pos: self.pos
+			size: self.size
+			source: '../image/BackGrounds/jungle.jpg'
 	category_house: cat_house
 	category_vehicle: cat_vehicle
 	category_character: cat_character
 	
 
 	CategoryHouse:
+		size: root.width/4,root.height/3
 		id: cat_house
-		x: root.x + 500
-		center_y: root.top - 100
+		x: root.width*5/8
+		center_y: root.height*5/6
 		
 	CategoryVehicle:
+		size: root.width/4,root.height/3
 		id: cat_vehicle
-		x: root.x + 500
-		center_y: root.top - 300
+		x: root.width*5/8
+		center_y: root.height*3/6
 		
 	CategoryCharacter:
+		size: root.width/4,root.height/3
 		id: cat_character
-		x: root.x + 500
-		center_y: root.top - 500
+		x: root.width*5/8
+		center_y: root.height*1/6
       
 	#A1 Object
     Object:
-        x: root.x
-        center_y: root.top - 50
-        pos_base: [root.x,root.top -100]
+        x: 0
+        center_y: root.height*11/12
+        pos_base: [0,root.height*1/6]
         name: "A1"
         canvas:
 	        Rectangle:
@@ -88,9 +95,9 @@
 
 	#A2 Object
     Object:
-        x: root.x
-        center_y: root.top - 150
-        pos_base: [root.x,root.top -200]
+        x: 0
+        center_y: root.height*9/12
+        pos_base: [0,root.height*2/6]
         name: "A2"
         canvas:
 	        Rectangle:
@@ -101,9 +108,9 @@
 		
 	#A3 Object
     Object:
-        x: root.x
-        center_y: root.top - 250
-        pos_base: [root.x,root.top -300]
+        x: 0
+        center_y: root.height*7/12
+        pos_base: [0,root.height*3/6]
         name: "A3"
         canvas:
 	        Rectangle:
@@ -114,9 +121,9 @@
 		
 	#A4 Object
     Object:
-        x: root.x
-        center_y: root.top - 350
-        pos_base: [root.x,root.top -4000]
+        x: 0
+        center_y: root.height*5/12
+        pos_base: [0,root.height*2/6]
         name: "A4"
         canvas:
 	        Rectangle:
@@ -127,9 +134,9 @@
 
 	#A5 Object
     Object:
-        x: root.x
-        center_y: root.top - 450
-        pos_base: [root.x,root.top -500]
+        x: 0
+        center_y: root.height*3/12
+        pos_base: [0,root.height*1/6]
         name: "A5"
         canvas:
 	        Rectangle:
@@ -140,9 +147,9 @@
 		
 	#A6 Object
     Object:
-        x: root.x
-        center_y: root.top - 550
-        pos_base: [root.x,root.top -600]
+        x: 0
+        center_y: root.height*1/12
+        pos_base: [0,0]
         name: "A6"
         canvas:
 	        Rectangle:
@@ -150,12 +157,12 @@
 	            size: self.size
 	            source: '../image/Dessins/Habitations/Habitat1.tif'
 		text: '../sound/CEstUne/CEstUneDena.wav'
-
+        
 	#B1 Object
     Object:
-        x: root.x +100
-        center_y: root.top - 50
-        pos_base: [root.x+100 ,root.top -100]
+        x: root.width*1/8
+        center_y: root.height*11/12
+        pos_base: [root.width*1/8,root.height*5/6]
         name: "B1"
         canvas:
 	        Rectangle:
@@ -166,9 +173,9 @@
 
 	#B2 Object
     Object:
-        x: root.x + 100
-        center_y: root.top - 150
-        pos_base: [root.x+100 ,root.top -200]
+        x: root.width*1/8
+        center_y: root.height*9/12
+        pos_base: [root.width*1/8,root.height*4/6]
         name: "B2"
         canvas:
 	        Rectangle:
@@ -179,9 +186,9 @@
 		
 	#B3 Object
     Object:
-        x: root.x + 100
-        center_y: root.top - 250
-        pos_base: [root.x+100 ,root.top -300]
+        x: root.width*1/8
+        center_y: root.height*7/12
+        pos_base: [root.width*1/8,root.height*3/6]
         name: "B3"
         canvas:
 	        Rectangle:
@@ -192,9 +199,9 @@
 		
 	#B4 Object
     Object:
-        x: root.x + 100
-        center_y: root.top - 350
-        pos_base: [root.x+100 ,root.top -400]
+        x: root.width*1/8
+        center_y: root.height*5/12
+        pos_base: [root.width*1/8 ,root.height*2/6]
         name: "B4"
         canvas:
 	        Rectangle:
@@ -205,9 +212,9 @@
 
 	#B5 Object
     Object:
-        x: root.x + 100
-        center_y: root.top - 450
-        pos_base: [root.x+100 ,root.top -500]
+        x: root.width*1/8
+        center_y: root.height*3/12
+        pos_base: [root.width*1/8 ,root.height*1/6]
         name: "B5"
         canvas:
 	        Rectangle:
@@ -218,9 +225,9 @@
 		
 	#B6 Object
     Object:
-        x: root.x + 100
-        center_y: root.top - 550
-        pos_base: [root.x+100 ,root.top -600]
+        x: root.width*1/8
+        center_y: root.height*1/12
+        pos_base: [root.width*1/8 ,0]
         name: "B6"
         canvas:
 	        Rectangle:
@@ -231,9 +238,9 @@
 
 	#C1 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 50
-        pos_base: [root.x+200 ,root.top -100]
+        x: root.width*2/8
+        center_y: root.height*11/12
+        pos_base: [root.width*2/8,root.height*5/6]
         name: "C1"
         canvas:
 	        Rectangle:
@@ -244,9 +251,9 @@
 
 	#C2 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 150
-        pos_base: [root.x+200 ,root.top-200]
+        x: root.width*2/8
+        center_y: root.height*9/12
+        pos_base: [root.width*2/8,root.height*4/6]
         name: "C2"
         canvas:
 	        Rectangle:
@@ -257,9 +264,9 @@
 		
 	#C3 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 250
-        pos_base: [root.x+200 ,root.top-300]
+        x: root.width*2/8
+        center_y: root.height*7/12
+        pos_base: [root.width*2/8,root.height*3/6]
         name: "C3"
         canvas:
 	        Rectangle:
@@ -270,9 +277,9 @@
 		
 	#C4 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 350
-        pos_base: [root.x+200,root.top-400]
+        x: root.width*2/8
+        center_y: root.height*5/12
+        pos_base: [root.width*2/8,root.height*2/6]
         name: "C4"
         canvas:
 	        Rectangle:
@@ -283,9 +290,9 @@
 
 	#C5 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 450
-        pos_base: [root.x+200,root.top-500]
+        x: root.width*2/8
+        center_y: root.height*3/12
+        pos_base: [root.width*2/8,root.height*1/6]
         name: "C5"
         canvas:
 	        Rectangle:
@@ -296,9 +303,9 @@
 		
 	#C6 Object
     Object:
-        x: root.x + 200
-        center_y: root.top - 550
-        pos_base: [root.x+200 ,root.top-600]
+        x: root.width*2/8
+        center_y: root.height*1/12
+        pos_base: [root.width*2/8,0]
         name: "C6"
         canvas:
 	        Rectangle:
