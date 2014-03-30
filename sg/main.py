@@ -6,7 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.core.audio import SoundLoader
-from sg.game1 import Game1App
+from game1 import Game1App
 
 class Intro(BoxLayout):
     id_box = ObjectProperty()
