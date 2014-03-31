@@ -68,6 +68,8 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="house"):
                         print("Congratulations !")
+                        sound = SoundLoader.load('../sound/right.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score += 5
                         val = self.parent.score
@@ -80,6 +82,8 @@ class Object(Widget):
                         return True
                     else:
                         print("This is the wrong category")
+                        sound = SoundLoader.load('../sound/wrong.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score -= 1
                         #The object is moved back to the initial position
@@ -93,6 +97,8 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="vehicle"):
                         print("Congratulations !")
+                        sound = SoundLoader.load('../sound/right.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score += 5
                         #Object is removed
@@ -100,6 +106,8 @@ class Object(Widget):
                         return True
                     else:
                         print("This is the wrong category")
+                        sound = SoundLoader.load('../sound/wrong.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score -= 1
                         #The object is moved back to the initial position
@@ -113,6 +121,8 @@ class Object(Widget):
                     #Check if the object has been dropped on the good category
                     if (self.category=="character"):
                         print("Congratulations !")
+                        sound = SoundLoader.load('../sound/right.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score += 5
                         #Object is removed
@@ -120,6 +130,8 @@ class Object(Widget):
                         return True
                     else:
                         print("This is the wrong category")
+                        sound = SoundLoader.load('../sound/wrong.wav');
+                        sound.play();
                         #Update of score
                         self.parent.score -= 1
                         #The object is moved back to the initial position
