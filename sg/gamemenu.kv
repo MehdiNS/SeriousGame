@@ -2,13 +2,15 @@
 
 <GameMenu>:
     orientation: 'horizontal'
+    button_game1: butt_g1
     Button:
         text: "Jeu 1"
+        id: butt_g1
         color:  [0, 0, 0, 1]
         bold: True
         font_size: 30
         background_normal: '../image/BackGrounds/jungle.jpg'
-        on_press: root.launchGame1()
+        on_press:   root.remove_widget(self);root.launchGame1()
     Button:
         text: "Jeu 2 (bientôt...)"
         font_size: 30
