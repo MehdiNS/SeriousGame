@@ -7,6 +7,11 @@ from kivy.properties import NumericProperty, \
 import dataBase
 import time
 from kivy.config import Config
+from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+import gameMenu
 
 
 class Object(Widget):
@@ -72,6 +77,7 @@ class Object(Widget):
                         sound.play();
                         #Update of score
                         self.parent.score += 5
+                        self.parent.remaining = self.parent.remaining - 1
                         val = self.parent.score
                         print(time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
                         #Object is removed
@@ -101,6 +107,7 @@ class Object(Widget):
                         sound.play();
                         #Update of score
                         self.parent.score += 5
+                        self.parent.remaining = self.parent.remaining - 1
                         #Object is removed
                         self.parent.remove_widget(self)
                         return True
@@ -125,6 +132,7 @@ class Object(Widget):
                         sound.play();
                         #Update of score
                         self.parent.score += 5
+                        self.parent.remaining = self.parent.remaining - 1
                         #Object is removed
                         self.parent.remove_widget(self)
                         return True
@@ -189,18 +197,51 @@ class Game2(Widget):
     print(Widget.height)
     #Score display
     score = NumericProperty(0)
+    remaining = NumericProperty(18)
+    clock = NumericProperty(0)
     
     #Define the three categories
     category_house = ObjectProperty(None)
     category_vehicle = ObjectProperty(None)
     category_character = ObjectProperty(None)
+
+    def increment_clock(self, dt):
+        if (self.remaining!=0):
+            self.clock += 1;
+        else:
+            return False;
     
     def update(self, dt):
-        pass
-    
-    def on_winning(self, touch):
-        pass
+        if (self.remaining==0):
+            self.on_winning();
+            return False;
+        
+    def on_winning(self):
+        layout = BoxLayout(orientation='vertical')
+        def callback(instance):
+            if (instance.text=='Rejouer'):
+                return Game2App().run();
+            else:
+                return gameMenu.GameMenuApp().run();
+            print('The button <%s> is being pressed' % instance.text)
+        btn1 = Button(text='Rejouer')
+        btn1.bind(on_press=callback)
+        btn2 = Button(text='Changer de jeu')
+        btn2.bind(on_press=callback)
+        layout.add_widget(btn1)
+        layout.add_widget(btn2)
+        popup = Popup(title='Felicitations !!! Ton score : ' + str(self.score),
+                      title_size = '20sp' ,
+                      content=layout,
+                      size_hint=(None, None),
+                      size=(400, 400),
+                      auto_dismiss=False)
+        popup.open()
+        print "popup ouvert"
+        sound = SoundLoader.load('../sound/finished.wav')
+        sound.play()
 
+    
 class Game2App(App):
     
     def build(self):
@@ -210,6 +251,7 @@ class Game2App(App):
         #Start the game
         game = Game2()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
+        Clock.schedule_interval(game.increment_clock, 1.0)
         return game
 
 if __name__ == '__main__':
