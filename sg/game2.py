@@ -85,6 +85,7 @@ class Object(Widget):
                         #SAving in dataBase
                         self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
                         self.local_db.print_table("game2")
+                        self.local_db.JSonToCSV(self.local_db.SQliteToJSOn("Game2"))
                         return True
                     else:
                         print("This is the wrong category")
@@ -192,6 +193,8 @@ class Game2(Widget):
     table_name = "Game2"
     table_attributes = ["time Date", "score int"]
     db.create_Table(table_name,table_attributes)
+    #test
+    JSON = db.SQliteToJSOn("Game2")
     
     print(Widget.width)
     print(Widget.height)

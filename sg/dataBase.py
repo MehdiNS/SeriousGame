@@ -1,5 +1,8 @@
 import sqlite3
 import os
+import json
+import csv
+
 
 
 
@@ -164,9 +167,47 @@ class DataBase():
         except sqlite3.Error as e:
             print "An error occurred:", e.args[0]
     def print_table(self, table_name):
+        ''' Function witch display every row of a table
+        :param table_name : name of the table
+        :type table_name : string
+        
+        '''
         #Display all the table name table_name
         for row in self.conn.execute("SELECT * FROM "+table_name+";"):
             print row
+        
+    def SQliteToJSOn(self, table_name):    
+        ''' Function witch convert a SQLITE table
+        :param table_name : name of the table
+        
+        :return JSON object
+        '''
+        #store table_name's data in cursor
+        self.cur.execute("SELECT * from "+table_name+";", ())
+        
+        r = [dict((self.cur.description[i][0], value) \
+               for i, value in enumerate(row)) for row in self.cur.fetchall()]
+        for row in json.dumps(r):
+            print row
+        #return JSON
+        return json.dumps(r)
+     
+    def JSonToCSV(self, json_object):
+        ''' Function witch create the csv file
+        :param json_object : the JSON Object
+        
+        '''        
+
+        #Creation of the csv file   
+        f = csv.writer(open("test.csv", "wb+"))
+         
+        # Write CSV Header
+        f.writerow(["Time", "Score"])
+
+        #Writing in the file        
+        for row in json.loads(json_object):
+            f.writerow([row["time"],row["score"]])
+            
         
         
         
