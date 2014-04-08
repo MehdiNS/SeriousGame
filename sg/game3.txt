@@ -1,0 +1,33 @@
+#Declaration of all objects
+#Object&link&category
+Object&../image/Dessins/Habitations/Habitat1.tif&house
+Object&../image/Dessins/Habitations/Habitat2.tif&house
+Object&../image/Dessins/Habitations/Habitat3.tif&house
+Object&../image/Dessins/Habitations/Habitat4.tif&house
+Object&../image/Dessins/Habitations/Habitat5.tif&house
+Object&../image/Dessins/Habitations/Habitat6.tif&house
+Object&../image/Dessins/Habitations/Habitat7.tif&house
+Object&../image/Dessins/Habitations/Habitat8.tif&house
+Object&../image/Dessins/Vehicles/Vehicle1.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle2.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle6.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle4.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle5.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle6.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle7.tif&vehicle
+Object&../image/Dessins/Vehicles/Vehicle8.tif&vehicle
+Object&../image/Dessins/Personnages/Perso1.tif&character
+Object&../image/Dessins/Personnages/Perso2.tif&character
+Object&../image/Dessins/Personnages/Perso3.tif&character
+Object&../image/Dessins/Personnages/Perso4.tif&character
+Object&../image/Dessins/Personnages/Perso5.tif&character
+Object&../image/Dessins/Personnages/Perso6.tif&character
+Object&../image/Dessins/Personnages/Perso7.tif&character
+Object&../image/Dessins/Personnages/Perso8.tif&character
+#Declaration of categories
+#Category&link&categoryName
+Category&../image/Dessins/Habitations/Habitat1.tif&house
+Category&../image/Dessins/Vehicules/Vehicule1.tif&vehicle
+Category&../image/Dessins/Personnages/Perso1.tif&character
+#End of the file
+endfile
