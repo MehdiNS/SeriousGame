@@ -2,15 +2,16 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config
 from kivy.core.audio import SoundLoader
+from core.window import Window
+from kivy.graphics import *
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.layout import Layout
 from kivy.uix.popup import Popup
+from kivy.uix.video import Video
 from kivy.uix.widget import Widget
-from kivy.core.window import Window
-from kivy.graphics import *
 import random
 import time
 
@@ -35,7 +36,7 @@ class Object2(Widget):
         self.canvas.add(self.rect)
         self.src=src
         self.video=vid
-        print(self.video)
+        #print(self.video)
 
     def __update__(self):
         print("COUCOU")
@@ -117,7 +118,24 @@ class Object2(Widget):
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
                         val = self.parent.score
-                        #SAving in dataBase
+                        
+                        def playVideo(chaine):
+                            l = BoxLayout(orientation='vertical')
+                            button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
+                            #video = Video(source=chaine, state='play', size_hint=(1, 0.9));
+                            l.add_widget(button)
+                            #l.add_widget(video)
+                            popup = Popup(title='Ecoute bien ! ',
+                                          content=l,
+                                          size_hint=(None, None),
+                                          size=(600, 600),
+                                          auto_dismiss=False
+                                          )
+                            button.bind(on_press=popup.dismiss)
+                            popup.open();
+                            
+                        playVideo(self.video)
+                        #Saving in dataBase
                         self.parent.local_db.insert_into_Table("Game3",
                                                         ["time Date", "score int", "source string", "destination string", "result string" ],
                                                          [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()),
@@ -126,12 +144,13 @@ class Object2(Widget):
                                                            ob.category,
                                                            "Success"
                                                         ]
-                                                    )
-                        self.parent.local_db.print_table("Game3")   
+                                                 )
+                        #self.parent.local_db.print_table("Game3")   
                         #Store the Widget representing the picture already found by the child
                         self.parent.already_learned.append(self)
                         #Start a new round
                         self.parent.new_round()
+                        
 
                     else:
                         print("This is the wrong category")
@@ -152,11 +171,26 @@ class Object2(Widget):
                                                            "Fail"
                                                         ]
                                                     )
-                        self.parent.local_db.print_table("Game3")
+                        #self.parent.local_db.print_table("Game3")
             
             #The object is moved back to the initial position
             #Update of position
             self.Back_to_Base(self.pos_base)
+    
+    def playVideo(self,chaine):
+        layout = BoxLayout(orientation='vertical')
+        video = Video(source=chaine, state='play', size_hint=(1, 0.9));
+        layout.add_widget(video);
+        #button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
+        #layout.add_widget(button)
+        popup = Popup(title='Ecoute bien ! ',
+                      content=layout,
+                      size_hint=(None, None),
+                      size=(600, 600),
+                      auto_dismiss=False
+                      )
+        #button.bind(on_press=popup.dismiss)
+        popup.open();
     
     def collide_customed(self, widget):
         '''
@@ -310,7 +344,7 @@ class Game3(Widget):
                 
             #Select the corresponding object   
             obj = self.ObjectList[rand_obj]
-            print(obj.get_name())
+            #print(obj.get_name())
             #Set object
             obj.set_center_y(self.windowSave[1]*i/6)
             obj.set_x(self.windowSave[0]*1/8)
@@ -352,16 +386,16 @@ class Game3(Widget):
         for objForm in saveFormDisplayed:
             if (indice==rand_pos):
                 for obj_inter in self.ObjectFormList:
-                    print(len(obj_inter.category))
-                    print(len(self.ObjDisplayed[rand_identique].category))
-                    print(obj_inter.category)
-                    print(self.ObjDisplayed[rand_identique].category)
+                    #print(len(obj_inter.category))
+                    #print(len(self.ObjDisplayed[rand_identique].category))
+                    #print(obj_inter.category)
+                    #print(self.ObjDisplayed[rand_identique].category)
                     if (obj_inter.category == (self.ObjDisplayed[rand_identique].category)):
                         objForm=obj_inter   
                         objForm.x = self.windowSave[0]*5/8
                         objForm.center_y = self.windowSave[1]*(indice*2+1)/6
                         break
-            print("cat ="+objForm.category)
+            #print("cat ="+objForm.category)
             objForm2 = ObjectForm(objForm.src,objForm.name,objForm.category,objForm.video,size=objForm.size,center_y=objForm.center_y-50,x=objForm.x)
             objForm2.set_pos_base([objForm.x,objForm.y])
             self.add_widget(objForm2)  
