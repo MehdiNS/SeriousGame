@@ -178,6 +178,8 @@ class Object(Widget):
         
         #Test the collision
         return(self.collide_widget(zone))
+    
+
 
 class Object2(Widget):
     """Class to manage drag and drop
@@ -341,6 +343,7 @@ class Object2(Widget):
         
         #Test the collision
         return(self.collide_widget(zone))
+            
         
 class Category(Widget):
     '''       
@@ -350,8 +353,17 @@ class Category(Widget):
         Widget.__init__(self, **kwargs)
         print(src)
         #self.size = (Window.size[0]*1/8,Window.size[1]*1/6)
-        self.canvas.add(Rectangle(pos = self.pos, size = self.size, source = src))
-                         
+        self.rect = Rectangle(pos = self.pos, size = self.size, source = src);
+        self.canvas.add(self.rect)
+        self.bind(size=self.updateCatSize())
+    
+    def updateCatSize(self):
+        self.rect.size=(Window.size[0]*1/8,Window.size[1]*1/6)
+        
+    def updateCatPos(self):
+        pass
+        #self.rect.pos =
+        
 class CategoryHouse(Widget):
     '''       
     This is the category which regroup all house objects
@@ -368,6 +380,8 @@ class CategoryCharacter(Widget):
 '''
 class Game3(Widget):
     
+    windowSave = Window.size;
+    
     #Create object list
     ObjectList = []
     
@@ -376,8 +390,6 @@ class Game3(Widget):
     
     #When init the Game
     def __init__(self, **kwargs):
-        print()
-        print()
         Widget.__init__(self, **kwargs)
         # Opening file reading mode
         loaded_file = open("./game3.txt", "r")     
@@ -393,7 +405,7 @@ class Game3(Widget):
                     obj = Object2(tab_res[1])
                     self.ObjectList.append(obj)
                 if (tab_res[0]=="Category"):
-                    cat = Category(tab_res[1], size=(Window.size[0]*1/8,Window.size[1]*1/6))
+                    cat = Category(tab_res[1], size=(self.windowSave[0]*1/8,self.windowSave[1]*1/6))
                     self.CategoryList.append(cat)
             #read the next line
             line = loaded_file.readline()
@@ -419,7 +431,16 @@ class Game3(Widget):
         else:
             return False;
     
+    def updateWidget(self):
+        for obj in self.CategoryList:
+            obj.updateCatSize();
+            break  
+        
+    
     def update(self, dt):
+        if (Window.size != self.windowSave):
+            self.windowSave = Window.size;
+            self.updateWidget();
         if (self.remaining==0):
             self.on_winning();
             return False;
