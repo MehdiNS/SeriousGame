@@ -11,187 +11,62 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.graphics import *
+import random
 import time
 
 #import dataBase
 import gameMenu
 
 
-#,category,size,x,center_y,pos_base,img_source,sound_src
-class Object(Widget):
-    """Class to manage drag and drop
-   
-    """   
-    
-    
-    #Open a connection for each Object
-    #local_db = dataBase.DataBase()  
-    
-    def on_touch_move(self, touch):
-        """Function called when the object is moved
-        
-        :param touch: finger on the screen     
-        
-        """       
-        #If the current object is the one grab
-        if touch.grab_current is self:
-            #Update of position
-            self.parent.touched_object = self
-            self.center_x = touch.x
-            self.center_y = touch.y          
-    
-    def on_touch_down(self, touch):
-        """Function called when the object is double clicked
-        
-        :param touch: finger on the screen     
-        
-        """
-        #Get the object touched by the user    
-        if self.collide_point(*touch.pos): 
-            if touch.is_double_tap:    
-                #Play a sound if the user do a double tap           
-                sound = SoundLoader.load(self.text)
-                sound.play()
-                return;
-            #Set opacity to display the current selected object
-            self.opacity = 0.2
-            #The object is grabbed
-            touch.grab(self)
-            return True
-
-    def on_touch_up(self, touch):
-        """Function called when the object is dropped after a move
-        
-        :param touch: finger on the screen     
-        
-        """
-        #If this is the correct object
-        if touch.grab_current is self:    
-            #The Object is ungrabbed
-            touch.ungrab(self)  
-            #The initial opacity is set                
-            self.opacity = 1
-            #Check if the object has been dropped on the category House
-            if (self.collide_customed(self.parent.category_house)):
-                print("House touched")
-                #If there is no other category in collision
-                if(not self.collide_customed(self.parent.category_vehicle)):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="house"):
-                        print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score += 5
-                        self.parent.remaining = self.parent.remaining - 1
-                        val = self.parent.score
-                        print(time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
-                        #Object is removed
-                        self.parent.remove_widget(self)
-                        #SAving in dataBase
-                        self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
-                        self.local_db.print_table("game2")
-                        #self.local_db.JSonToCSV(self.local_db.SQliteToJSOn("Game2"))
-                        return True
-                    else:
-                        print("This is the wrong category")
-                        sound = SoundLoader.load('../sound/wrong.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score -= 1
-                        #The object is moved back to the initial position
-                        self.pos = self.pos_base
-
-            #Check if the object has been dropped on the category Vehicle
-            elif(self.collide_customed(self.parent.category_vehicle)):
-                print("Vehicle touched")
-                #If there is no other category in collision                
-                if((not self.collide_customed(self.parent.category_house))and(not self.collide_customed(self.parent.category_character))):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="vehicle"):
-                        print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score += 5
-                        self.parent.remaining = self.parent.remaining - 1
-                        #Object is removed
-                        self.parent.remove_widget(self)
-                        return True
-                    else:
-                        print("This is the wrong category")
-                        sound = SoundLoader.load('../sound/wrong.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score -= 1
-                        #The object is moved back to the initial position
-                        self.pos = self.pos_base
-
-            #Check if the object has been dropped on the category Character
-            elif(self.collide_customed(self.parent.category_character)):
-                print("Character touched")
-                #If there is no other category in collision
-                if (not self.collide_customed(self.parent.category_vehicle)):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="character"):
-                        print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score += 5
-                        self.parent.remaining = self.parent.remaining - 1
-                        #Object is removed
-                        self.parent.remove_widget(self)
-                        return True
-                    else:
-                        print("This is the wrong category")
-                        sound = SoundLoader.load('../sound/wrong.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score -= 1
-                        #The object is moved back to the initial position
-                        self.pos = self.pos_base   
-            
-            #The object is moved back to the initial position
-            self.pos = self.pos_base
-    
-    def collide_customed(self, widget):
-        '''
-        Fonction which implement custom collision between 2 widgets
-        This function draw a square with center (self.center_x, self.center_y) and size = ( widget.size - self.size)/2 (1 if res <0)
-        :param Widget: the widget to test collision with self
-        :type widget = Widget, we will use center_x,center_y and size
-        
-        :return Return true is self's custom zone is in collision with widget
-    '''
-        #Calcul of radius
-        size = ((widget.size_hint_x - self.size_hint_x)/4)
-        # if r <=0, the test will be done with a point
-        if (size<=0):
-            size = 1
-        #Creation of the zone
-        zone = Widget()
-        zone.center_x = widget.center_x
-        zone.center_y = widget.center_y
-        zone.size_hint_x = size
-        zone.size_hint_y = size
-        
-        #Test the collision
-        return(self.collide_widget(zone))
-    
-
-
 class Object2(Widget):
     """Class to manage drag and drop
    
     """   
+    src=""
+    name=""
+    category=""
+    pos_base=[0,0]
+    def __init__(self,src,nme,cat,**kwargs):
+        Widget.__init__(self, **kwargs)
+        self.name=nme
+        self.category=cat
+        self.rect = Rectangle(pos = self.pos, size = self.size, source = src)
+        self.canvas.add(self.rect)
+        #self.bind(x=self.updateX(),y=self.updateY())
+        self.src=src
+        #Open a connection for each Object
+        #local_db = dataBase.DataBase()  
+    def __update__(self):
+        print("COUCOU")
+    def updateCatSize(self):
+        self.size=(Window.size[0]*1/4,Window.size[1]*2/3)
+    def updateX(self):
+        pass
+    def updateY(self):
+        pass                
     
+    def set_x(self,x):
+        self.x=x;
+        
+    def set_pos_base(self,pos_base):
+        self.pos_base=pos_base;
     
-    def __init__(self, cat):
-        self.category = cat
-    #Open a connection for each Object
-    #local_db = dataBase.DataBase()  
+    def set_center_y(self,center_y):
+        self.center_y=center_y;
     
+    def get_name(self):
+        return(self.name)
+    def UpdatePos(self, pos):
+        self.center_x = pos.x
+        self.center_y = pos.y
+        self.rect.pos = [pos.x-self.rect.size[0]/2,pos.y-self.rect.size[1]/2]     
+        
+    def Back_to_Base(self, pos_base):
+        self.x=pos_base[0]
+        self.y=pos_base[1]      
+        self.rect.pos = [pos_base[0],pos_base[1]] 
+        
+         
     def on_touch_move(self, touch):
         """Function called when the object is moved
         
@@ -201,9 +76,7 @@ class Object2(Widget):
         #If the current object is the one grab
         if touch.grab_current is self:
             #Update of position
-            self.parent.touched_object = self
-            self.center_x = touch.x
-            self.center_y = touch.y          
+            self.UpdatePos(touch)
     
     def on_touch_down(self, touch):
         """Function called when the object is double clicked
@@ -220,6 +93,7 @@ class Object2(Widget):
                 return;
             #Set opacity to display the current selected object
             self.opacity = 0.2
+            print(self.name)
             #The object is grabbed
             touch.grab(self)
             return True
@@ -228,36 +102,31 @@ class Object2(Widget):
         """Function called when the object is dropped after a move
         
         :param touch: finger on the screen     
-        
         """
+
         #If this is the correct object
         if touch.grab_current is self:    
             #The Object is ungrabbed
             touch.ungrab(self)  
             #The initial opacity is set                
             self.opacity = 1
-            #Check if the object has been dropped on the category House
-            if (self.collide_customed(self.parent.category_house)):
-                print("House touched")
-                #If there is no other category in collision
-                if(not self.collide_customed(self.parent.category_vehicle)):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="house"):
+            for ob in self.parent.FormDisplayed:
+                if (self.collide_customed(ob)):
+                    print("check cat: "+self.category+"="+ob.category+"?")
+                    if (self.category==ob.category):
                         print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
+                        sound = SoundLoader.load('../sound/right.wav')
+                        sound.play()
                         #Update of score
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
-                        val = self.parent.score
-                        print(time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
-                        #Object is removed
-                        self.parent.remove_widget(self)
+                        #val = self.parent.score
+                        #Change widgets
+                        self.parent.reload_widgets()
                         #SAving in dataBase
-                        self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
-                        self.local_db.print_table("game2")
-                        #self.local_db.JSonToCSV(self.local_db.SQliteToJSOn("Game2"))
-                        return True
+                        #self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
+                        #self.local_db.print_table("game2")   
+
                     else:
                         print("This is the wrong category")
                         sound = SoundLoader.load('../sound/wrong.wav');
@@ -266,59 +135,10 @@ class Object2(Widget):
                         self.parent.score -= 1
                         #The object is moved back to the initial position
                         self.pos = self.pos_base
-
-            #Check if the object has been dropped on the category Vehicle
-            elif(self.collide_customed(self.parent.category_vehicle)):
-                print("Vehicle touched")
-                #If there is no other category in collision                
-                if((not self.collide_customed(self.parent.category_house))and(not self.collide_customed(self.parent.category_character))):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="vehicle"):
-                        print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score += 5
-                        self.parent.remaining = self.parent.remaining - 1
-                        #Object is removed
-                        self.parent.remove_widget(self)
-                        return True
-                    else:
-                        print("This is the wrong category")
-                        sound = SoundLoader.load('../sound/wrong.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score -= 1
-                        #The object is moved back to the initial position
-                        self.pos = self.pos_base
-
-            #Check if the object has been dropped on the category Character
-            elif(self.collide_customed(self.parent.category_character)):
-                print("Character touched")
-                #If there is no other category in collision
-                if (not self.collide_customed(self.parent.category_vehicle)):
-                    #Check if the object has been dropped on the good category
-                    if (self.category=="character"):
-                        print("Congratulations !")
-                        sound = SoundLoader.load('../sound/right.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score += 5
-                        self.parent.remaining = self.parent.remaining - 1
-                        #Object is removed
-                        self.parent.remove_widget(self)
-                        return True
-                    else:
-                        print("This is the wrong category")
-                        sound = SoundLoader.load('../sound/wrong.wav');
-                        sound.play();
-                        #Update of score
-                        self.parent.score -= 1
-                        #The object is moved back to the initial position
-                        self.pos = self.pos_base   
             
             #The object is moved back to the initial position
-            self.pos = self.pos_base
+            #Update of position
+            self.Back_to_Base(self.pos_base)
     
     def collide_customed(self, widget):
         '''
@@ -343,41 +163,44 @@ class Object2(Widget):
         
         #Test the collision
         return(self.collide_widget(zone))
-            
+       
         
-class Category(Widget):
+class ObjectForm(Widget):
     '''       
     This is a category
 '''
-    def __init__(self,src,**kwargs):
+    def __init__(self,src,nme,cat,**kwargs):
         Widget.__init__(self, **kwargs)
-        print(src)
-        #self.size = (Window.size[0]*1/8,Window.size[1]*1/6)
-        self.rect = Rectangle(pos = self.pos, size = self.size, source = src);
+        self.name=nme
+        self.category=cat
+        self.rect = Rectangle(pos = self.pos, size = self.size, source = src)
         self.canvas.add(self.rect)
-        self.bind(size=self.updateCatSize())
+        #self.bind(x=self.updateX(),y=self.updateY())
+        self.src=src
+        #Open a connection for each Object
+        #local_db = dataBase.DataBase()  
     
+    def __update__(self):
+        print("COUCOU")
     def updateCatSize(self):
-        self.rect.size=(Window.size[0]*1/8,Window.size[1]*1/6)
-        
-    def updateCatPos(self):
+        self.size=(Window.size[0]*1/4,Window.size[1]*2/3)
+    def updateX(self):
         pass
-        #self.rect.pos =
-        
-class CategoryHouse(Widget):
-    '''       
-    This is the category which regroup all house objects
-'''
+    def updateY(self):
+        pass                
     
-class CategoryVehicle(Widget):
-    '''       
-    This is the category which regroup all vehicle objects
-'''
-
-class CategoryCharacter(Widget):
-    '''       
-    This is the category which regroup all character objects
-'''
+    def set_x(self,x):
+        self.x=x;
+        
+    def set_pos_base(self,pos_base):
+        self.pos_base=pos_base;
+    
+    def set_center_y(self,center_y):
+        self.center_y=center_y;
+    
+    def get_name(self):
+        return(self.name)
+        
 class Game3(Widget):
     
     windowSave = Window.size;
@@ -386,7 +209,11 @@ class Game3(Widget):
     ObjectList = []
     
     #Create cat list
-    CategoryList =[]
+    ObjectFormList =[]
+    
+    #List to store Form objects displayed
+    FormDisplayed = []
+    ObjDisplayed = []
     
     #When init the Game
     def __init__(self, **kwargs):
@@ -400,29 +227,108 @@ class Game3(Widget):
         while (line!="endfile"):
             if (line[0]!='#'):
                 tab_res = line.split('&')
+                tab_save = tab_res[1].split('/')
+                tab_name = tab_save[4].split('.')
+                nameImg = tab_name[0]
                 if (tab_res[0]=="Object"):
+                    
                     #Create Object with src and category 
-                    obj = Object2(tab_res[1])
+                    obj = Object2(tab_res[1],nameImg,tab_res[2],size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3),text=tab_res[3])               
+                    print("Object :"+obj.get_name()+obj.src)
                     self.ObjectList.append(obj)
-                if (tab_res[0]=="Category"):
-                    cat = Category(tab_res[1], size=(self.windowSave[0]*1/8,self.windowSave[1]*1/6))
-                    self.CategoryList.append(cat)
+                if (tab_res[0]=="ObjectForm"):
+                    cat =tab_res[2]
+                    form = ObjectForm(tab_res[1],nameImg,cat[:-1], size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3))
+                    print("ObjectForm :"+form.get_name()+form.src)
+                    self.ObjectFormList.append(form)
             #read the next line
             line = loaded_file.readline()
-         
-        for obj in self.CategoryList:
-                self.add_widget(obj) 
-                break  
-
+        
+        size_list_obj = len(self.ObjectList)
+        size_list_obj_form = len(self.ObjectFormList)
+        mem_rand_obj = []
+        mem_rand_form = []
+        
+        #Display 3 items on the right
+        for i in [1,3,5]:
+            ##############"PART FOR THE OBJ######################
+            #Choose an int randomly, but different for the previous one
+            rand_obj = random.randint(0, size_list_obj-1)            
+            checked = 0
+            while (checked != 1):
+                rand_obj = random.randint(0, size_list_obj-1)
+                checked=1
+                for j in mem_rand_obj:                    
+                    if (j == rand_obj):
+                        checked = 0
+                    
+            mem_rand_obj.append(rand_obj)
+                
+            #Select the corresponding object   
+            obj = self.ObjectList[rand_obj]
+            print(obj.get_name())
+            #Set object
+            obj.set_center_y(self.windowSave[1]*i/6)
+            obj.set_x(self.windowSave[0]*1/8)
+            print("obj="+str(obj.get_name())+str(obj.center_y)+str(obj.center_x))
+            ##############"PART FOR THE FORM######################
+            #Choose an int randomly, but different for the previous one
+            rand_form = random.randint(0, size_list_obj_form-1)            
+            checked = 0
+            while (checked != 1):
+                rand_form = random.randint(0, size_list_obj_form-1)
+                checked=1
+                for j in mem_rand_obj:                    
+                    if (j == rand_form):
+                        checked = 0  
+                for j in mem_rand_form:                    
+                    if (j == rand_form):
+                        checked = 0     
+            mem_rand_form.append(rand_form)       
+                 
+            objForm = self.ObjectFormList[rand_form]
+            
+            #Set Object
+            objForm.set_center_y(self.windowSave[1]*i/6)
+            objForm.set_x(self.windowSave[0]*5/8)            
+                        
+            #Update lists
+            self.FormDisplayed.append(objForm)
+            self.ObjDisplayed.append(obj)
+        
+        rand_identique = random.randint(0, 2)
+        rand_pos = random.randint(0, 2)
+        
+        for obj in self.ObjDisplayed:
+            #Both Widgets are added
+            obj2 = Object2(obj.src,obj.name,obj.category,size=obj.size,center_y=obj.center_y-50,x=obj.x)
+            obj2.set_pos_base([obj.x,obj.y])
+            self.add_widget(obj2)
+            print(obj2.name)
+        indice=0    
+        for objForm in self.FormDisplayed:
+            if (indice==rand_pos):
+                for obj_inter in self.ObjectFormList:
+                    print(len(obj_inter.category))
+                    print(len(self.ObjDisplayed[rand_identique].category))
+                    print(obj_inter.category)
+                    print(self.ObjDisplayed[rand_identique].category)
+                    if (obj_inter.category == (self.ObjDisplayed[rand_identique].category)):
+                        objForm=obj_inter   
+                        objForm.x = self.windowSave[0]*5/8
+                        objForm.center_y = self.windowSave[1]*(indice*2+1)/6
+                        break
+            print("cat ="+objForm.category)
+            objForm2 = ObjectForm(objForm.src,objForm.name,objForm.category,size=objForm.size,center_y=objForm.center_y-50,x=objForm.x)
+            objForm2.set_pos_base([objForm.x,objForm.y])
+            self.add_widget(objForm2)   
+            #update list
+            self.FormDisplayed[indice]=objForm2
+            indice = indice +1          
     #Score display
     score = NumericProperty(0)
     remaining = NumericProperty(18)
     clock = NumericProperty(0)
-    
-    #Define the three categories
-    category_house = ObjectProperty(None)
-    category_vehicle = ObjectProperty(None)
-    category_character = ObjectProperty(None)
     
         
     def increment_clock(self, dt):
@@ -432,7 +338,7 @@ class Game3(Widget):
             return False;
     
     def updateWidget(self):
-        for obj in self.CategoryList:
+        for obj in self.ObjectList:
             obj.updateCatSize();
             break  
         
