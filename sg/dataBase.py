@@ -45,10 +45,10 @@ class DataBase():
         """
         #Print
         print("Create table : \n")
-        
+
         #Create a request (Beginning)
         request = "CREATE TABLE IF NOT EXISTS "+ table_name +"("; 
-        
+
         #Construct the request with attributes
         for i in attributes :
             request = request+i+",";
@@ -187,8 +187,6 @@ class DataBase():
         
         r = [dict((self.cur.description[i][0], value) \
                for i, value in enumerate(row)) for row in self.cur.fetchall()]
-        for row in json.dumps(r):
-            print row
         #return JSON
         return json.dumps(r)
      

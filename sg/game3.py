@@ -14,7 +14,7 @@ from kivy.graphics import *
 import random
 import time
 
-#import dataBase
+import dataBase
 import gameMenu
 
 
@@ -22,20 +22,21 @@ class Object2(Widget):
     """Class to manage drag and drop
    
     """   
+    video=""
     src=""
     name=""
     category=""
     pos_base=[0,0]
-    def __init__(self,src,nme,cat,**kwargs):
+    def __init__(self,src,nme,cat,vid,**kwargs):
         Widget.__init__(self, **kwargs)
         self.name=nme
         self.category=cat
         self.rect = Rectangle(pos = self.pos, size = self.size, source = src)
         self.canvas.add(self.rect)
-        #self.bind(x=self.updateX(),y=self.updateY())
         self.src=src
-        #Open a connection for each Object
-        #local_db = dataBase.DataBase()  
+        self.video=vid
+        print(self.video)
+
     def __update__(self):
         print("COUCOU")
     def updateCatSize(self):
@@ -108,7 +109,6 @@ class Object2(Widget):
             self.opacity = 1
             for ob in self.parent.FormDisplayed:
                 if (self.collide_customed(ob)):
-                    print("check cat: "+self.category+"="+ob.category+"?")
                     if (self.category==ob.category):
                         print("Congratulations !")
                         sound = SoundLoader.load('../sound/right.wav')
@@ -116,10 +116,18 @@ class Object2(Widget):
                         #Update of score
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
-                        #val = self.parent.score
+                        val = self.parent.score
                         #SAving in dataBase
-                        #self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
-                        #self.local_db.print_table("game2")   
+                        self.parent.local_db.insert_into_Table("Game3",
+                                                        ["time Date", "score int", "source string", "destination string", "result string" ],
+                                                         [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()),
+                                                           str(val),
+                                                           self.category,
+                                                           ob.category,
+                                                           "Success"
+                                                        ]
+                                                    )
+                        self.parent.local_db.print_table("Game3")   
                         #Store the Widget representing the picture already found by the child
                         self.parent.already_learned.append(self)
                         #Start a new round
@@ -133,6 +141,18 @@ class Object2(Widget):
                         self.parent.score -= 1
                         #The object is moved back to the initial position
                         self.pos = self.pos_base
+                        val = self.parent.score
+                        #SAving in dataBase
+                        self.parent.local_db.insert_into_Table("Game3",
+                                                        ["time Date", "score integer", "source string", "destination string", "result string" ],
+                                                         [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()),
+                                                           str(val),
+                                                           self.category,
+                                                           ob.category,
+                                                           "Fail"
+                                                        ]
+                                                    )
+                        self.parent.local_db.print_table("Game3")
             
             #The object is moved back to the initial position
             #Update of position
@@ -167,16 +187,18 @@ class ObjectForm(Widget):
     '''       
     This class represents empty shapes
 '''
-    def __init__(self,src,nme,cat,**kwargs):
+    video=""
+    src=""
+    name=""
+    category=""
+    def __init__(self,src,nme,cat,vid,**kwargs):
         Widget.__init__(self, **kwargs)
         self.name=nme
         self.category=cat
         self.rect = Rectangle(pos = self.pos, size = self.size, source = src)
         self.canvas.add(self.rect)
-        #self.bind(x=self.updateX(),y=self.updateY())
         self.src=src
-        #Open a connection for each Object
-        #local_db = dataBase.DataBase()  
+        self.video=vid;
     
     def __update__(self):
         print("COUCOU")
@@ -200,6 +222,12 @@ class ObjectForm(Widget):
         return(self.name)
         
 class Game3(Widget):
+    
+    #Open a dataBase connexion
+    local_db = dataBase.DataBase()  
+    table_name = "Game3"
+    table_attributes = ["time Date", "score integer", "source string", "destination string", "result string" ]
+    local_db.create_Table(table_name,table_attributes)
     #Save window's size to use later
     windowSave = Window.size;
     
@@ -233,11 +261,11 @@ class Game3(Widget):
                 nameImg = tab_name[0]
                 if (tab_res[0]=="Object"):                   
                     #Create Object with src and category 
-                    obj = Object2(tab_res[1],nameImg,tab_res[2],size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3),text=tab_res[3])               
+                    obj = Object2(tab_res[1],nameImg,tab_res[2],tab_res[3],size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3),text=tab_res[4])               
                     self.ObjectList.append(obj)
                 if (tab_res[0]=="ObjectForm"):
                     cat =tab_res[2]
-                    form = ObjectForm(tab_res[1],nameImg,cat[:-1], size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3))
+                    form = ObjectForm(tab_res[1],nameImg,cat,tab_res[3], size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3))
                     self.ObjectFormList.append(form)
             #read the next line
             line = loaded_file.readline()
@@ -316,7 +344,7 @@ class Game3(Widget):
         
         for obj in saveObjDisplayed:
             #Both Widgets are added
-            obj2 = Object2(obj.src,obj.name,obj.category,size=obj.size,center_y=obj.center_y-50,x=obj.x)
+            obj2 = Object2(obj.src,obj.name,obj.category,obj.video,size=obj.size,center_y=obj.center_y-50,x=obj.x)
             obj2.set_pos_base([obj.x,obj.y])
             self.add_widget(obj2)
             self.ObjDisplayed.append(obj2)
@@ -334,7 +362,7 @@ class Game3(Widget):
                         objForm.center_y = self.windowSave[1]*(indice*2+1)/6
                         break
             print("cat ="+objForm.category)
-            objForm2 = ObjectForm(objForm.src,objForm.name,objForm.category,size=objForm.size,center_y=objForm.center_y-50,x=objForm.x)
+            objForm2 = ObjectForm(objForm.src,objForm.name,objForm.category,objForm.video,size=objForm.size,center_y=objForm.center_y-50,x=objForm.x)
             objForm2.set_pos_base([objForm.x,objForm.y])
             self.add_widget(objForm2)  
             self.FormDisplayed.append(objForm2) 
