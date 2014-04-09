@@ -39,11 +39,7 @@ class Object2(Widget):
     def __update__(self):
         print("COUCOU")
     def updateCatSize(self):
-        self.size=(Window.size[0]*1/4,Window.size[1]*2/3)
-    def updateX(self):
-        pass
-    def updateY(self):
-        pass                
+        self.size=(Window.size[0]*1/4,Window.size[1]*2/3)            
     
     def set_x(self,x):
         self.x=x;
@@ -121,11 +117,13 @@ class Object2(Widget):
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
                         #val = self.parent.score
-                        #Change widgets
-                        self.parent.reload_widgets()
                         #SAving in dataBase
                         #self.local_db.insert_into_Table("Game2", ["time Date", "score int"], [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()), str(val)])
                         #self.local_db.print_table("game2")   
+                        #Store the Widget representing the picture already found by the child
+                        self.parent.already_learned.append(self)
+                        #Start a new round
+                        self.parent.new_round()
 
                     else:
                         print("This is the wrong category")
@@ -167,7 +165,7 @@ class Object2(Widget):
         
 class ObjectForm(Widget):
     '''       
-    This is a category
+    This class represents empty shapes
 '''
     def __init__(self,src,nme,cat,**kwargs):
         Widget.__init__(self, **kwargs)
@@ -202,7 +200,7 @@ class ObjectForm(Widget):
         return(self.name)
         
 class Game3(Widget):
-    
+    #Save window's size to use later
     windowSave = Window.size;
     
     #Create object list
@@ -211,9 +209,12 @@ class Game3(Widget):
     #Create cat list
     ObjectFormList =[]
     
-    #List to store Form objects displayed
+    #List to store Form displayed and Object displayed
     FormDisplayed = []
     ObjDisplayed = []
+    
+    #Create a list to store pictures already found by the children
+    already_learned = []
     
     #When init the Game
     def __init__(self, **kwargs):
@@ -230,29 +231,44 @@ class Game3(Widget):
                 tab_save = tab_res[1].split('/')
                 tab_name = tab_save[4].split('.')
                 nameImg = tab_name[0]
-                if (tab_res[0]=="Object"):
-                    
+                if (tab_res[0]=="Object"):                   
                     #Create Object with src and category 
                     obj = Object2(tab_res[1],nameImg,tab_res[2],size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3),text=tab_res[3])               
-                    print("Object :"+obj.get_name()+obj.src)
                     self.ObjectList.append(obj)
                 if (tab_res[0]=="ObjectForm"):
                     cat =tab_res[2]
                     form = ObjectForm(tab_res[1],nameImg,cat[:-1], size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3))
-                    print("ObjectForm :"+form.get_name()+form.src)
                     self.ObjectFormList.append(form)
             #read the next line
             line = loaded_file.readline()
-        
+        self.new_round()
+                  
+    #Score display
+    score = NumericProperty(0)
+    remaining = NumericProperty(18)
+    clock = NumericProperty(0)
+    
+    def new_round(self):  
+        #Store ObjectList and ObjectFormList size
         size_list_obj = len(self.ObjectList)
         size_list_obj_form = len(self.ObjectFormList)
+        #Create 2 list to store random values 
         mem_rand_obj = []
         mem_rand_form = []
-        
+        #Reset list of objects and forms displayed
+        for o in self.ObjDisplayed:
+            self.remove_widget(o)
+        for f in self.FormDisplayed:
+            self.remove_widget(f)
+        self.FormDisplayed = []
+        self.ObjDisplayed = []
+        #2 list to store objects before update
+        saveFormDisplayed = []
+        saveObjDisplayed = []
         #Display 3 items on the right
         for i in [1,3,5]:
             ##############"PART FOR THE OBJ######################
-            #Choose an int randomly, but different for the previous one
+            #Choose an integer randomly, but different for the previous one
             rand_obj = random.randint(0, size_list_obj-1)            
             checked = 0
             while (checked != 1):
@@ -270,9 +286,8 @@ class Game3(Widget):
             #Set object
             obj.set_center_y(self.windowSave[1]*i/6)
             obj.set_x(self.windowSave[0]*1/8)
-            print("obj="+str(obj.get_name())+str(obj.center_y)+str(obj.center_x))
             ##############"PART FOR THE FORM######################
-            #Choose an int randomly, but different for the previous one
+            #Choose an integer randomly, but different for the previous one
             rand_form = random.randint(0, size_list_obj_form-1)            
             checked = 0
             while (checked != 1):
@@ -293,20 +308,20 @@ class Game3(Widget):
             objForm.set_x(self.windowSave[0]*5/8)            
                         
             #Update lists
-            self.FormDisplayed.append(objForm)
-            self.ObjDisplayed.append(obj)
+            saveFormDisplayed.append(objForm)
+            saveObjDisplayed.append(obj)
         
         rand_identique = random.randint(0, 2)
         rand_pos = random.randint(0, 2)
         
-        for obj in self.ObjDisplayed:
+        for obj in saveObjDisplayed:
             #Both Widgets are added
             obj2 = Object2(obj.src,obj.name,obj.category,size=obj.size,center_y=obj.center_y-50,x=obj.x)
             obj2.set_pos_base([obj.x,obj.y])
             self.add_widget(obj2)
-            print(obj2.name)
+            self.ObjDisplayed.append(obj2)
         indice=0    
-        for objForm in self.FormDisplayed:
+        for objForm in saveFormDisplayed:
             if (indice==rand_pos):
                 for obj_inter in self.ObjectFormList:
                     print(len(obj_inter.category))
@@ -321,16 +336,12 @@ class Game3(Widget):
             print("cat ="+objForm.category)
             objForm2 = ObjectForm(objForm.src,objForm.name,objForm.category,size=objForm.size,center_y=objForm.center_y-50,x=objForm.x)
             objForm2.set_pos_base([objForm.x,objForm.y])
-            self.add_widget(objForm2)   
+            self.add_widget(objForm2)  
+            self.FormDisplayed.append(objForm2) 
             #update list
             self.FormDisplayed[indice]=objForm2
-            indice = indice +1          
-    #Score display
-    score = NumericProperty(0)
-    remaining = NumericProperty(18)
-    clock = NumericProperty(0)
-    
-        
+            indice = indice +1
+            
     def increment_clock(self, dt):
         if (self.remaining!=0):
             self.clock += 1;
