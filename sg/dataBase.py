@@ -190,14 +190,15 @@ class DataBase():
         #return JSON
         return json.dumps(r)
      
-    def JSonToCSV(self, json_object):
+    def JSonToCSV(self, json_object, fullfilename):
         ''' Function witch create the csv file
         :param json_object : the JSON Object
+        :param fullfilename : path+filename
         
         '''        
 
         #Creation of the csv file   
-        f = csv.writer(open("test.csv", "wb+"))
+        f = csv.writer(open(fullfilename, "wb+"))
          
         # Write CSV Header
         f.writerow(["Time", "Score"])
