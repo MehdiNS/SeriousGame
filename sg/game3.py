@@ -3,7 +3,6 @@ from kivy.clock import Clock
 from kivy.config import Config
 from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
-from core.window import Window
 from kivy.graphics import *
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -21,15 +20,19 @@ import gameMenu
 
 
 class Object2(Widget):
-    """Class to manage drag and drop
+    """Class to manage drag and drop on an object
    
     """   
+    #Attributes of the class
     video=""
     src=""
     name=""
     category=""
     pos_base=[0,0]
     def __init__(self,src,nme,cat,vid,**kwargs):
+        """Function executed when the Object2 is created.
+       
+        """ 
         Widget.__init__(self, **kwargs)
         self.name=nme
         self.category=cat
@@ -37,11 +40,11 @@ class Object2(Widget):
         self.canvas.add(self.rect)
         self.src=src
         self.video=vid
-        #print(self.video)
-
-    def __update__(self):
-        print("COUCOU")
+        
     def updateCatSize(self):
+        """Function witch update size in % of the window
+       
+        """ 
         self.size=(Window.size[0]*1/4,Window.size[1]*2/3)            
     
     def set_x(self,x):
@@ -56,11 +59,17 @@ class Object2(Widget):
     def get_name(self):
         return(self.name)
     def UpdatePos(self, pos):
+        """Function witch update position
+       
+        """ 
         self.center_x = pos.x
         self.center_y = pos.y
         self.rect.pos = [pos.x-self.rect.size[0]/2,pos.y-self.rect.size[1]/2]     
         
     def Back_to_Base(self, pos_base):
+        """Function witch reset object's position
+       
+        """ 
         self.x=pos_base[0]
         self.y=pos_base[1]      
         self.rect.pos = [pos_base[0],pos_base[1]] 
@@ -119,13 +128,24 @@ class Object2(Widget):
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
                         val = self.parent.score
-                        #Playing the video
-                        print "la video est : "
-                        print self.video
-                       
                         
-                        
-                        #SAving in dataBase
+                        def playVideo(chaine):
+                            l = BoxLayout(orientation='vertical')
+                            button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
+                            #video = Video(source=chaine, state='play', size_hint=(1, 0.9));
+                            l.add_widget(button)
+                            #l.add_widget(video)
+                            popup = Popup(title='Ecoute bien ! ',
+                                          content=l,
+                                          size_hint=(None, None),
+                                          size=(600, 600),
+                                          auto_dismiss=False
+                                          )
+                            button.bind(on_press=popup.dismiss)
+                            popup.open();
+                            
+                        playVideo(self.video)
+                        #Saving in dataBase
                         self.parent.local_db.insert_into_Table("Game3",
                                                         ["time Date", "score int", "source string", "destination string", "result string" ],
                                                          [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()),
@@ -134,13 +154,13 @@ class Object2(Widget):
                                                            ob.category,
                                                            "Success"
                                                         ]
-                                                    )
+                                                 )
                         #self.parent.local_db.print_table("Game3")   
                         #Store the Widget representing the picture already found by the child
                         self.parent.already_learned.append(self)
                         #Start a new round
                         self.parent.new_round()
-                        return self.playVideo('../video/Img/H1_1.mp4')
+                        
 
                     else:
                         print("This is the wrong category")
@@ -168,18 +188,21 @@ class Object2(Widget):
             self.Back_to_Base(self.pos_base)
     
     def playVideo(self,chaine):
+        """Function to display a video
+       
+        """ 
         layout = BoxLayout(orientation='vertical')
         video = Video(source=chaine, state='play', size_hint=(1, 0.9));
-        #layout.add_widget(video);
-        button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
-        layout.add_widget(button)
+        layout.add_widget(video);
+        #button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
+        #layout.add_widget(button)
         popup = Popup(title='Ecoute bien ! ',
                       content=layout,
                       size_hint=(None, None),
                       size=(600, 600),
                       auto_dismiss=False
                       )
-        button.bind(on_press=popup.dismiss)
+        #button.bind(on_press=popup.dismiss)
         popup.open();
     
     def collide_customed(self, widget):
@@ -211,11 +234,15 @@ class ObjectForm(Widget):
     '''       
     This class represents empty shapes
 '''
+    #Attributes
     video=""
     src=""
     name=""
     category=""
     def __init__(self,src,nme,cat,vid,**kwargs):
+        """Function called when the form is created
+       
+        """ 
         Widget.__init__(self, **kwargs)
         self.name=nme
         self.category=cat
@@ -246,7 +273,9 @@ class ObjectForm(Widget):
         return(self.name)
         
 class Game3(Widget):
-    
+    """Class representing the game 3
+   
+    """ 
     #Open a dataBase connexion
     local_db = dataBase.DataBase()  
     table_name = "Game3"
@@ -270,6 +299,9 @@ class Game3(Widget):
     
     #When init the Game
     def __init__(self, **kwargs):
+        """Function called when the game3 is created
+   
+        """ 
         Widget.__init__(self, **kwargs)
         # Opening file reading mode
         loaded_file = open("./game3.txt", "r")     
@@ -286,10 +318,12 @@ class Game3(Widget):
                 if (tab_res[0]=="Object"):                   
                     #Create Object with src and category 
                     obj = Object2(tab_res[1],nameImg,tab_res[2],tab_res[3],size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3),text=tab_res[4])               
+                    #Updating object's list
                     self.ObjectList.append(obj)
                 if (tab_res[0]=="ObjectForm"):
                     cat =tab_res[2]
                     form = ObjectForm(tab_res[1],nameImg,cat,tab_res[3], size=(self.windowSave[0]*1/4,self.windowSave[1]*1/3))
+                    #updating form's list
                     self.ObjectFormList.append(form)
             #read the next line
             line = loaded_file.readline()
@@ -301,6 +335,9 @@ class Game3(Widget):
     clock = NumericProperty(0)
     
     def new_round(self):  
+        """Function called when the user win a round to start a new one
+   
+        """ 
         #Store ObjectList and ObjectFormList size
         size_list_obj = len(self.ObjectList)
         size_list_obj_form = len(self.ObjectFormList)
@@ -363,6 +400,7 @@ class Game3(Widget):
             saveFormDisplayed.append(objForm)
             saveObjDisplayed.append(obj)
         
+        #choose 2 random numbers
         rand_identique = random.randint(0, 2)
         rand_pos = random.randint(0, 2)
         
@@ -441,7 +479,9 @@ class Game3(Widget):
 
     
 class Game3App(App):
+    """Class representing our game3 application
     
+    """ 
     def build(self):
         #Set window's size
         print(Config.get('graphics', 'width'))
