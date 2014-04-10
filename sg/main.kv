@@ -1,5 +1,6 @@
 #:kivy 1.8.0
 
+#First screen of the app
 <Intro>: 
     button_box: button_input
     id_box: id_input
@@ -39,6 +40,8 @@
         color: [0,0,0,1]
         on_press: root.show_export()
         
+        
+# Code to handle the export dialog box
 <ExportDialog>:
 	
     text_input: text_input
