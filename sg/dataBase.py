@@ -190,22 +190,25 @@ class DataBase():
         #return JSON
         return json.dumps(r)
      
-    def JSonToCSV(self, json_object, fullfilename):
+    def JSonToCSV(self, json_object, fullfilename, attributes):
         ''' Function witch create the csv file
         :param json_object : the JSON Object
         :param fullfilename : path+filename
+        :param attributes : list of attributes
         
-        '''        
-
+        ''' 
+        if (len(attributes)==0):     
+            #Designed for a game3 select, it will be given in argument soon  
+            default = ["time", "score", "source", "destination", "result" ]
         #Creation of the csv file   
         f = csv.writer(open(fullfilename, "wb+"))
          
         # Write CSV Header
-        f.writerow(["Time", "Score"])
+        f.writerow(default)
 
         #Writing in the file        
         for row in json.loads(json_object):
-            f.writerow([row["time"],row["score"]])
+            f.writerow([row["time"],row["score"],row["source"],row["destination"],row["result"]])
             
         
         
