@@ -4,7 +4,7 @@
     button_box: button_input
     id_box: id_input
 	orientation: "vertical"
-    height: "100dp"
+    height: "200dp"
     size_hint_y: None
     id_grid: grid_layout
 
@@ -32,5 +32,40 @@
         text: "Login"
         color: [0,0,0,1]
         on_press: root.login()
-            
-          
+        
+    Button:
+        id: button_export
+        text: "Export"
+        color: [0,0,0,1]
+        on_press: root.show_export()
+        
+<ExportDialog>:
+	
+    text_input: text_input
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Annuler"
+                on_release: root.cancel()
+
+            Button:
+                text: "Exporter"
+                on_release: root.export(filechooser.path, text_input.text)
+
+        
