@@ -3,18 +3,20 @@
 <GameMenu>:
     orientation: 'horizontal'
     button_game1: butt_g1
+    button_game2: butt_g2
     Button:
         text: "Jeu 1"
         id: butt_g1
         color:  [0, 0, 0, 1]
         bold: True
         font_size: 30
-        background_normal: '../image/BackGrounds/jungle.jpg'
         on_press:   root.remove_widget(self);root.launchGame1()
     Button:
-        text: "Jeu 2 (bientôt...)"
+        text: "Jeu 2"
+        id: butt_g2
         font_size: 30
         bold: True
+        color:  [1,1, 1, 1]
         background_color: 187/255, 210/255, 225/255 ,1
-        #on_press: root.launch()
+        on_press: root.remove_widget(self);root.launchGame2()
     

@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config
 from kivy.core.audio import SoundLoader
+from kivy.core.window import Window
 from core.window import Window
 from kivy.graphics import *
 from kivy.properties import NumericProperty, ObjectProperty
@@ -118,24 +119,13 @@ class Object2(Widget):
                         self.parent.score += 5
                         self.parent.remaining = self.parent.remaining - 1
                         val = self.parent.score
+                        #Playing the video
+                        print "la video est : "
+                        print self.video
+                       
                         
-                        def playVideo(chaine):
-                            l = BoxLayout(orientation='vertical')
-                            button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
-                            #video = Video(source=chaine, state='play', size_hint=(1, 0.9));
-                            l.add_widget(button)
-                            #l.add_widget(video)
-                            popup = Popup(title='Ecoute bien ! ',
-                                          content=l,
-                                          size_hint=(None, None),
-                                          size=(600, 600),
-                                          auto_dismiss=False
-                                          )
-                            button.bind(on_press=popup.dismiss)
-                            popup.open();
-                            
-                        playVideo(self.video)
-                        #Saving in dataBase
+                        
+                        #SAving in dataBase
                         self.parent.local_db.insert_into_Table("Game3",
                                                         ["time Date", "score int", "source string", "destination string", "result string" ],
                                                          [time.strftime("%a %d %b %Y %H:%M:%S", time.gmtime()),
@@ -144,13 +134,13 @@ class Object2(Widget):
                                                            ob.category,
                                                            "Success"
                                                         ]
-                                                 )
+                                                    )
                         #self.parent.local_db.print_table("Game3")   
                         #Store the Widget representing the picture already found by the child
                         self.parent.already_learned.append(self)
                         #Start a new round
                         self.parent.new_round()
-                        
+                        return self.playVideo('../video/Img/H1_1.mp4')
 
                     else:
                         print("This is the wrong category")
@@ -180,16 +170,16 @@ class Object2(Widget):
     def playVideo(self,chaine):
         layout = BoxLayout(orientation='vertical')
         video = Video(source=chaine, state='play', size_hint=(1, 0.9));
-        layout.add_widget(video);
-        #button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
-        #layout.add_widget(button)
+        #layout.add_widget(video);
+        button = Button(text='Revenir au jeu', size_hint=(1, 0.1))
+        layout.add_widget(button)
         popup = Popup(title='Ecoute bien ! ',
                       content=layout,
                       size_hint=(None, None),
                       size=(600, 600),
                       auto_dismiss=False
                       )
-        #button.bind(on_press=popup.dismiss)
+        button.bind(on_press=popup.dismiss)
         popup.open();
     
     def collide_customed(self, widget):

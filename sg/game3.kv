@@ -1,5 +1,10 @@
 #:kivy 1.8
-<Game3>:	
+<Game3>:
+	canvas:
+		Rectangle:
+			pos: self.pos
+			size: self.size
+			source: '../image/BackGrounds/jungle.jpg'	
 	Label:
 		size: root.width/8,root.height/6
         font_size: root.width*1/8  
